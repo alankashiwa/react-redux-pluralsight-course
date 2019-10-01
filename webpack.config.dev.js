@@ -2,15 +2,13 @@ const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-// Node environment: set to development => import for babel plugin
 process.env.NODE_ENV = "development";
 
-// Export object that configure webpack
 module.exports = {
   mode: "development",
-  target: "web", //  other targets such as : node
+  target: "web",
   devtool: "cheap-module-source-map",
-  entry: "./src/index", // ★the entry point, .js can be ignored
+  entry: "./src/index",
   output: {
     path: path.resolve(__dirname, "build"),
     publicPath: "/",
@@ -25,6 +23,9 @@ module.exports = {
     https: false
   },
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env.API_URL": JSON.stringify("http://localhost:3001")
+    }),
     new HtmlWebpackPlugin({
       template: "src/index.html",
       favicon: "src/favicon.ico"
@@ -35,7 +36,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ["babel-loader"]
+        use: ["babel-loader", "eslint-loader"]
       },
       {
         test: /(\.css)$/,
